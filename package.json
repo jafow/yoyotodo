@@ -1,0 +1,14 @@
+{
+  "name": "yoyo-todo",
+  "version": "0.0.1",
+  "description": "todo list in yo-yo",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "yo-yo"
+  ],
+  "author": "Jared Fowler @jafow (jared.a.fowler@gmail.com)",
+  "license": "MIT"
+}
