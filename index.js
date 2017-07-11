@@ -2,9 +2,6 @@ const yo = require('yo-yo')
 var addBtn = document.getElementById('add-todo')
 var todoInput = document.getElementById('input-todo')
 var container = document.getElementById('list')
-var todoList = new TodoList()
-addBtn.addEventListener('click', todoList.addTodo)
-document.addEventListener('DOMContentReady', todoList.update)
 
 class TodoList {
   constructor() {
@@ -39,3 +36,6 @@ function getInput (el) {
   return val
 }
 
+var todoList = new TodoList()
+addBtn.addEventListener('click', todoList.addTodo)
+document.addEventListener('DOMContentReady', todoList.update)
