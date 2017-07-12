@@ -9,24 +9,38 @@ class TodoList {
     this.addTodo = this.addTodo.bind(this)
     this.formatItem = this.formatItem.bind(this)
     this.update = this.update.bind(this)
+    this.strikeAndRemove = this.strikeAndRemove.bind(this)
+    this.maybeRemove = this.maybeRemove.bind(this)
   }
   addTodo() {
     this.items.push(this.formatItem(getInput(todoInput)))
     yo.update(container, this.update())
   }
   formatItem(str) {
+    let key = Symbol()
     return {
-      id: this.items.length,
+      key: this.items.length,
       content: str
     }
   }
+  maybeRemove (el) {
+    if (el.hasAttribute('data-strike')) {
+      el.parentElement.removeChild(el)
+      this.items = this.items.filter((item)  => item.id !== el.id)
+    }
+  }
+  strikeAndRemove (e) {
+    var targ = e.target
+    let clicked = false
+    this.maybeRemove(toggleStrikeThrough(targ))
+  }
   update() {
-   return yo`
-     <div class="items-list">
-      <ul>
-        ${this.items.map(item => yo`<li data-id=${item.id}>${item.content}</li>`)}
-       </ul>
-     </div>`
+    return yo`
+      <div class="items-list">
+        <ul>
+          ${this.items.map(item => yo`<li onclick=${this.strikeAndRemove} data-id=${item.id}>${item.content}</li>`)}
+        </ul>
+      </div>`
   }
 }
 
@@ -36,6 +50,24 @@ function getInput (el) {
   return val
 }
 
+
+function toggleStrikeThrough(el) {
+  if (el.hasAttribute('data-strike')) {
+    el.removeAttribute('data-strike')
+  } else {
+    el.setAttribute('data-strike', true)
+  }
+  return el
+}
+
+function test () {
+  console.log('test ', Date.now())
+}
 var todoList = new TodoList()
 addBtn.addEventListener('click', todoList.addTodo)
+// container.addEventListener('click', strikeAndRemove)
 document.addEventListener('DOMContentReady', todoList.update)
+
+
+
+
