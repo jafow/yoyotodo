@@ -6,22 +6,18 @@ var container = document.getElementById('list')
 class TodoList {
   constructor() {
     this.items = []
-    this.addTodo = this.addTodo.bind(this)
-    this.formatItem = this.formatItem.bind(this)
-    this.update = this.update.bind(this)
-    this.strikeAndRemove = this.strikeAndRemove.bind(this)
-    this.maybeRemove = this.maybeRemove.bind(this)
+  }
+  formatItem(str) {
+    let id = Symbol()
+    return {
+      id: key,
+      key: this.items.length,
+      content: str
+    }
   }
   addTodo() {
     this.items.push(this.formatItem(getInput(todoInput)))
     yo.update(container, this.update())
-  }
-  formatItem(str) {
-    let key = Symbol()
-    return {
-      key: this.items.length,
-      content: str
-    }
   }
   maybeRemove (el) {
     if (el.hasAttribute('data-strike')) {
@@ -38,7 +34,7 @@ class TodoList {
     return yo`
       <div class="items-list">
         <ul>
-          ${this.items.map(item => yo`<li onclick=${this.strikeAndRemove} data-id=${item.id}>${item.content}</li>`)}
+          ${this.items.map(item => yo`<li onclick=${(e) => this.strikeAndRemove(e)} data-id=${item.id}>${item.content}</li>`)}
         </ul>
       </div>`
   }
@@ -60,12 +56,8 @@ function toggleStrikeThrough(el) {
   return el
 }
 
-function test () {
-  console.log('test ', Date.now())
-}
 var todoList = new TodoList()
-addBtn.addEventListener('click', todoList.addTodo)
-// container.addEventListener('click', strikeAndRemove)
+addBtn.addEventListener('click', (e) => { todoList.addTodo() })
 document.addEventListener('DOMContentReady', todoList.update)
 
 
