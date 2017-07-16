@@ -8,10 +8,8 @@ class TodoList {
     this.items = []
   }
   formatItem(str) {
-    let id = Symbol()
     return {
-      id: key,
-      key: this.items.length,
+      key: String(Date.now()), 
       content: str
     }
   }
@@ -20,21 +18,23 @@ class TodoList {
     yo.update(container, this.update())
   }
   maybeRemove (el) {
+    let elementKey = el.getAttribute('data-id')
     if (el.hasAttribute('data-strike')) {
       el.parentElement.removeChild(el)
-      this.items = this.items.filter((item)  => item.id !== el.id)
+      this.items = this.items.filter((item)  => item.key !== elementKey)
+    } else {
+      el.setAttribute('data-strike', true)
     }
   }
   strikeAndRemove (e) {
     var targ = e.target
-    let clicked = false
-    this.maybeRemove(toggleStrikeThrough(targ))
+    this.maybeRemove(targ)
   }
   update() {
     return yo`
       <div class="items-list">
         <ul>
-          ${this.items.map(item => yo`<li onclick=${(e) => this.strikeAndRemove(e)} data-id=${item.id}>${item.content}</li>`)}
+          ${this.items.map(item => yo`<li onclick=${(e) => this.strikeAndRemove(e)} data-id=${item.key}>${item.content}</li>`)}
         </ul>
       </div>`
   }
